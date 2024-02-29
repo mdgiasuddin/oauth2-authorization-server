@@ -51,6 +51,15 @@ public class SecurityConfiguration {
     @Value("${jwt.authorities.claim-name}")
     private String authoritiesClaimName;
 
+    @Value("${authorization.server.client-id}")
+    private String clientId;
+
+    @Value("${authorization.server.client-secret}")
+    private String clientSecret;
+
+    @Value("${authorization.server.redirect-uri}")
+    private String redirectUri;
+
     @Bean
     @Order(1)
     public SecurityFilterChain oauthFilterChain(HttpSecurity http) throws Exception {
@@ -89,11 +98,11 @@ public class SecurityConfiguration {
     @Bean
     public RegisteredClientRepository registeredClientRepository() {
         RegisteredClient registeredClient = RegisteredClient.withId(UUID.randomUUID().toString())
-                .clientId("public-client")
-                .clientSecret("client-secret")
+                .clientId(clientId)
+                .clientSecret(clientSecret)
                 .scope(OidcScopes.OPENID)
                 .scope(OidcScopes.PROFILE)
-                .redirectUri("http://127.0.0.1:8089/login/oauth2/code/public-client")
+                .redirectUri(redirectUri)
                 .clientAuthenticationMethod(ClientAuthenticationMethod.NONE)
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_POST)
